@@ -44,7 +44,7 @@ if ($isConnected){
 
         ?>
         <a href="session.php?id=<?php echo $getSession[0] ?>" ><button >Session n°<?php echo $getSession[0]." | ".$getSession[2]?></button></a>
-        <form method="POST" action="endSession.php?idSession=<?php echo $getSession[0] ?>">
+        <form method="POST" action="endSession.php?idSession=<?php echo $getSession[0]."&id=".$_SESSION['id'] ?>">
             <button type="submit" name="endSession" value="X">X</button>
         </form>
         <?php
@@ -52,7 +52,7 @@ if ($isConnected){
     else{
         ?>
         <h3>Créez une session:</h3>
-        <form method="POST" action="createSession.php">
+        <form method="POST" action="createSession.php?id=<?php echo $_SESSION['id'] ?>">
             <input type="text"  id="session" name="session" placeholder="Nom de session" required>
             <button type="submit" name="submitSession" value="Session" >Créer la session</button>
         </form>

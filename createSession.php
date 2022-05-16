@@ -1,4 +1,5 @@
 <?php
+include ('db.php');
 include('functions.php');
 include ('checkLogin.php'); // nous renvoei $isConneected true ou false
 if (isset($_POST['submitSession'])){

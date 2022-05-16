@@ -22,5 +22,5 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
 else{
     $isConnected = false;
 }
-session_write_close();
+//session_write_close();
 ?>
