@@ -43,7 +43,7 @@ if ($isConnected){
         $getSession = getSession();
 
         ?>
-        <a href="session.php?id=<?php echo $getSession[0] ?>" ><button >Session n°<?php echo $getSession[0]." | ".$getSession[2]?></button></a>
+        <a href="session.php?session=<?php echo $getSession[0]."&id=".$_SESSION['id'] ?>" ><button >Session n°<?php echo $getSession[0]." | ".$getSession[2]?></button></a>
         <form method="POST" action="endSession.php?idSession=<?php echo $getSession[0]."&id=".$_SESSION['id'] ?>">
             <button type="submit" name="endSession" value="X">X</button>
         </form>

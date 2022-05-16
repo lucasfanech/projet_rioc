@@ -64,4 +64,49 @@ function endSession($id){
         }
     }
 }
+
+
+// Fonction getWaitingList : affiche la liste d'attente en fonction de la sessionId et affiche dans l'ordre premier arrivé
+function getWaitingList($sessionId){
+    include('db.php');
+    $sql = "SELECT * FROM `waiting_line` WHERE processing = 0 AND session_id = ".$sessionId." ORDER BY waiting_time;";
+    if (isset($connection)){
+        $result = $connection -> query($sql);
+        // Associative array
+
+        $wList = array();
+        while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+            $wList[] = $row;
+        }
+        return $wList;
+    }
+}
+
+// Fonction stateUser
+function stateUser($sessionId, $userId){
+    include('db.php');
+    $sql = "SELECT * FROM `waiting_line` WHERE processing = 0 AND session_id = 22 AND user_id = 1 ORDER BY waiting_time;";
+    if (!empty($connection)) {
+        $result = mysqli_query($connection, $sql);
+    }
+
+    if($result){
+        if (isset($result->fetch_row()[4])){
+            if ($result->fetch_row()[4] == 0){
+                return 1;
+            }
+            else if( $result->fetch_row()[4] == 1){
+                return 2;
+            }
+        }
+        else{
+            return 0;
+        }
+
+    }
+    else{
+        return mysqli_error($connection);
+    }
+    // return | en appel = 1, en en verif = 2, rien = 0
+}
 ?>

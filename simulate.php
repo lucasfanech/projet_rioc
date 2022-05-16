@@ -17,18 +17,22 @@ if (!isset($idTable)){
 }
 else{
     // Si on a défini la table
+
+    // Appel DB pour vérifier si le bouton est déjà activé
+
+
     ?>
     <form method="POST" action="simulate.php">
 
         <input id="idTable" name="idTable" type="hidden" value="<?php echo $idTable ?>">
-        <button type="submit" name="call" value="call" >Bouton appel (1)</button>
-        <button type="submit" name="verify" value="verify" >Bouton verif (2)</button>
+        <button type="submit" name="call" value="call" >Bouton appel (0)</button>
+        <button type="submit" name="verify" value="verify" >Bouton verif (1)</button>
         <button type="submit" name="cancel" value="cancel" disabled >Annuler</button>
     </form>
 <?php
 }
 
-// Appel DB pour vérifier si le bouton est déjà activé
+
 
 
 if (isset($_POST['call'])){
