@@ -7,16 +7,16 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    <a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Rejoindre la session</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Liste d'attente</a>
+                    <a class="nav-link" href="waiting.php">Liste d'attente</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Admin</a>
+                    <a class="nav-link" href="admin.php">Admin</a>
                 </li>
             </ul>
         </div>

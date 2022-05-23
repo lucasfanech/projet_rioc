@@ -7,11 +7,12 @@
     <!-- width=device-width aide à définir la largeur de la page, pour qu'elle soit égale à celle de l'écran de votre appareil -->
     <title>TP-BOX</title>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-
+    <link href="fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
 </head>
 <body>
 <?php
 include ('header.php');
+include ('functions.php');
 ?>
 
 <!-- corps -->
@@ -30,16 +31,26 @@ include ('header.php');
                 <p class="col-md-8 fs-4">Une telecommande fournie aux élèves leur permet d'appeler leur enseignant pour toute question ou vérification du travail demandé, tout en favorisant l'équité grâce à un système de file d'attente.</p>
                 <button class="btn btn-primary btn-lg" type="button">Découvrir le projet</button>
                 <!-- Session en cours -->
-                <button class="btn btn-outline-secondary btn-lg" type="button">Session en cours</button>
+                <?php
+                if (isSessionExists()){
+                    $actualSession = getSession();
+                    ?>
+                <a href="session.php?session=<?php echo $actualSession[0]?>" >
+                    <button class="btn btn-outline-secondary btn-lg" type="button">Session en cours</button>
+                </a>
+                <?php
+                }
+                ?>
+
             </div>
         </div>
 
         <div class="row align-items-md-stretch">
             <div class="col-md-6">
-                <div class="h-100 p-5 text-white bg-dark rounded-3">
+                <div class="h-100 p-5 text-white bg-primary rounded-3">
                     <h2>Accès enseignant</h2>
                     <p>L'enseignant peut se connecter et créer, gérer ou encore terminer une session. Il est aussi possible de récupérer les données des dernières sessions.</p>
-                    <button class="btn btn-outline-light" type="button">Accéder</button>
+                    <a href="admin.php"><button class="btn btn-outline-light" type="button">Accéder</button></a>
                 </div>
             </div>
             <div class="col-md-6">

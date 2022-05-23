@@ -82,6 +82,51 @@ function getWaitingList($sessionId){
     }
 }
 
+function nbCalls($session_id){
+    include('db.php');
+    $sql = "SELECT COUNT(id_waiting) FROM `waiting_line` WHERE session_id = ".$session_id." AND processing = 0;";
+    if (!empty($connection)) {
+        $result = mysqli_query($connection, $sql);
+    }
+
+    if($result){
+        $row = mysqli_fetch_row($result);
+        if (isset($row[0])){
+            return $row[0];
+        }
+        else{
+            return 0;
+        }
+
+    }
+    else{
+        return 0;
+    }
+
+}
+function nbCallsDone($session_id){
+    include('db.php');
+    $sql = "SELECT COUNT(id_waiting) FROM `waiting_line` WHERE session_id = ".$session_id." AND processing = 1;";
+    if (!empty($connection)) {
+        $result = mysqli_query($connection, $sql);
+    }
+
+    if($result){
+        $row = mysqli_fetch_row($result);
+        if (isset($row[0])){
+            return $row[0];
+        }
+        else{
+            return 0;
+        }
+
+    }
+    else{
+        return 0;
+    }
+
+}
+
 // Fonction stateUser
 function stateUser($sessionId, $userId){
     include('db.php');
@@ -144,5 +189,21 @@ function processButton($num, $session, $userId){
             return false;
         }
     }
+}
+
+function getSessionsList(){
+    include('db.php');
+    $sql="SELECT * FROM `sessions` ORDER BY id_session DESC;";
+    if (isset($connection)){
+        $result = $connection -> query($sql);
+        // Associative array
+
+        $sList = array();
+        while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+            $sList[] = $row;
+        }
+        return $sList;
+    }
+
 }
 ?>
