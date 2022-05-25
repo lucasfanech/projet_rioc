@@ -82,6 +82,22 @@ function getWaitingList($sessionId){
     }
 }
 
+// Fonction getDoneList : affiche la liste des appels déjà résolus
+function getDoneList($sessionId){
+    include('db.php');
+    $sql = "SELECT * FROM `waiting_line` WHERE processing = 1 AND session_id = ".$sessionId." ORDER BY waiting_time;";
+    if (isset($connection)){
+        $result = $connection -> query($sql);
+        // Associative array
+
+        $dList = array();
+        while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+            $dList[] = $row;
+        }
+        return $dList;
+    }
+}
+
 function nbCalls($session_id){
     include('db.php');
     $sql = "SELECT COUNT(id_waiting) FROM `waiting_line` WHERE session_id = ".$session_id." AND processing = 0;";
@@ -125,6 +141,24 @@ function nbCallsDone($session_id){
         return 0;
     }
 
+}
+
+// FOnction validateCall : permet de valider un call par admin tout en attribuant une note
+function validateCall($messageId, $rate){
+    include('db.php');
+    if (isset($rate)){
+        $sql = "UPDATE `waiting_line` SET `rate` = '".$rate."', processing = '1' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
+    }else{
+        $sql = "UPDATE `waiting_line` SET `rate` = 'NULL', processing = '1' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
+    }
+
+    if (!empty($connection)) {
+        if ($connection->query($sql) === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 // Fonction stateUser
@@ -204,6 +238,32 @@ function getSessionsList(){
         }
         return $sList;
     }
+
+}
+
+function getInterval($date){
+    $debut = new DateTime($date,new DateTimeZone('Europe/Paris'));
+    // Execution de code
+    $fin = new DateTime('now');
+    if (!($debut->diff($fin)->format('%s') == 0)){
+        $interval = $debut->diff($fin)->format('Il y a %s secondes');
+    }
+    if (!($debut->diff($fin)->format('%i') == 0)){
+        $interval = $debut->diff($fin)->format('Il y a %i minutes et %s secondes');
+    }
+    if (!($debut->diff($fin)->format('%h') == 0)){
+        $interval = $debut->diff($fin)->format('Il y a %h heures, %i minutes et %s secondes');
+    }
+    if (!($debut->diff($fin)->format('%d') == 0)){
+        $interval = $debut->diff($fin)->format('Il y a %d jours, %h heures, %i minutes et %s secondes');
+    }
+    if (!($debut->diff($fin)->format('%m') == 0)){
+        $interval = $debut->diff($fin)->format('Il y a %m mois, %d jours, %h heures, %i minutes et %s secondes');
+    }
+    if (!($debut->diff($fin)->format('%y') == 0)){
+        $interval = $debut->diff($fin)->format('Il y a %r%y ans, %m mois, %d jours, %h heures, %i minutes et %s secondes');
+    }
+    return $interval;
 
 }
 ?>
