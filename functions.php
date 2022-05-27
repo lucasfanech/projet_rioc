@@ -98,6 +98,22 @@ function getDoneList($sessionId){
     }
 }
 
+// Fonction getRates : obtenir les notes des groupes
+function getRates($sessionId){
+    include('db.php');
+    $sql="SELECT user_id, AVG(rate) AS rates FROM `waiting_line` WHERE session_id='".$sessionId."' AND ISNULL(rate)=0 GROUP BY user_id ORDER BY user_id ASC;";
+    if (isset($connection)){
+        $result = $connection -> query($sql);
+        // Associative array
+
+        $rList = array();
+        while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+            $rList[] = $row;
+        }
+        return $rList;
+    }
+}
+
 function nbCalls($session_id){
     include('db.php');
     $sql = "SELECT COUNT(id_waiting) FROM `waiting_line` WHERE session_id = ".$session_id." AND processing = 0;";
@@ -146,10 +162,12 @@ function nbCallsDone($session_id){
 // FOnction validateCall : permet de valider un call par admin tout en attribuant une note
 function validateCall($messageId, $rate){
     include('db.php');
-    if (isset($rate)){
-        $sql = "UPDATE `waiting_line` SET `rate` = '".$rate."', processing = '1' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
+    date_default_timezone_set('Europe/Paris');
+    $date = date('Y-m-d H:i:s');
+    if ($rate !== "NULL"){
+        $sql = "UPDATE `waiting_line` SET `rate` = '".$rate."', processing = '1', solved_date = '".$date."' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
     }else{
-        $sql = "UPDATE `waiting_line` SET `rate` = 'NULL', processing = '1' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
+        $sql = "UPDATE `waiting_line` SET `rate` = NULL, processing = '1', solved_date = '".$date."' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
     }
 
     if (!empty($connection)) {

@@ -10,17 +10,20 @@ if (isset($_POST['sendRate'])){
     if (isset($_POST['star-5'])){
         $rate = 5;
     }
-    if (isset($_POST['star-4'])){
+    else if (isset($_POST['star-4'])){
         $rate = 4;
     }
-    if (isset($_POST['star-3'])){
+    else if (isset($_POST['star-3'])){
         $rate = 3;
     }
-    if (isset($_POST['star-2'])){
+    else if (isset($_POST['star-2'])){
         $rate = 2;
     }
-    if (isset($_POST['star-1'])){
+    else if (isset($_POST['star-1'])){
         $rate = 1;
+    }
+    else{
+        $rate = "NULL";
     }
     if (isset($_POST['whichCall'])){
         $whichCall = $_POST['whichCall'];
@@ -28,7 +31,7 @@ if (isset($_POST['sendRate'])){
     validateCall($whichCall,$rate);
     $messageRate = "
     <div class='alert alert-warning alert-dismissible fade show' role='alert'>
-       Vous avez noté de: <strong>".$rate." <i class='fa-solid fa-star'></i> </strong> la pertinence de la question.
+       Vous avez noté de: <strong>".$rate." <i class='fa-solid fa-star'></i> </strong> ce groupe.
       <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
     </div>
     ";
@@ -89,11 +92,11 @@ if (isset($_GET['session'])) {
     ?>
     <div class="row">
         <div class="col-md-3">
-            <h3>Question/Validation</h3>
+
             <div class="card text-bg-light" >
 
                 <div class="card-header">
-                    Questions
+                    <h4>Questions</h4>
                 </div>
                 <ul class="list-group list-group-flush ">
                     <li class="list-group-item">
@@ -132,14 +135,7 @@ if (isset($_GET['session'])) {
                                         <td>
                                             <?php
 
-                                            //$debut = new DateTime($row['waiting_time']);
-
-                                            // Execution de code
-                                            //$fin = new DateTime('now');
-                                            $interval = getInterval($row['waiting_time']);
-                                            //$interval = $debut->diff($fin)->format('%r%y years, %m months, %d days, %h hours, %i minutes, %s seconds');
-
-                                            echo  $interval?>
+                                            echo  $row['waiting_time'];?>
                                         </td>
 
                                     </tr>
@@ -158,7 +154,7 @@ if (isset($_GET['session'])) {
             <div class="card text-bg-success" >
 
                 <div class="card-header">
-                    Validations
+                    <h4>Validations</h4>
                 </div>
                 <ul class="list-group list-group-flush ">
                     <li class="list-group-item">
@@ -196,14 +192,7 @@ if (isset($_GET['session'])) {
                                         <td>
                                             <?php
 
-                                            //$debut = new DateTime($row['waiting_time']);
-
-                                            // Execution de code
-                                            //$fin = new DateTime('now');
-                                            $interval = getInterval($row['waiting_time']);
-                                            //$interval = $debut->diff($fin)->format('%r%y years, %m months, %d days, %h hours, %i minutes, %s seconds');
-
-                                            echo  $interval?>
+                                            echo  $row['waiting_time'];?>
                                         </td>
 
                                     </tr>
@@ -220,11 +209,11 @@ if (isset($_GET['session'])) {
             </div>
         </div>
         <div class="col-md-6">
-            <h3>File d'attente</h3>
+
             <div class="card text-bg-primary" >
 
                 <div class="card-header">
-                    File d'attente
+                    <h4>File d'attente</h4>
                 </div>
                 <ul class="list-group list-group-flush ">
                     <li class="list-group-item">
@@ -369,11 +358,62 @@ if (isset($_GET['session'])) {
             </div>
         </div>
         <div class="col-md-3">
-            <h3>Traités</h3>
+
+            <div class="card text-bg-warning" >
+
+                <div class="card-header">
+                    <h4>Notes</h4>
+                </div>
+                <ul class="list-group list-group-flush ">
+                    <li class="list-group-item">
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">n° Table</th>
+                                    <th scope="col">Note moyenne</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $ratesList = getRates($sessionId);
+                                foreach ($ratesList as $row) {
+                                    ?>
+                                    <tr class="table table-light">
+
+                                        <td><?php
+                                            echo $row['user_id'];
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            echo round($row['rates'],1)."/5";
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Commentaires</h3>
+        </div>
+        <div class="col">
+
             <div class="card text-bg-danger" >
 
                 <div class="card-header">
-                    Traités
+                    <h4>Traités</h4>
                 </div>
                 <ul class="list-group list-group-flush ">
                     <li class="list-group-item">
@@ -384,7 +424,9 @@ if (isset($_GET['session'])) {
                                 <tr>
                                     <th scope="col">n° Table</th>
                                     <th scope="col">type d'appel</th>
-                                    <th scope="col">date</th>
+                                    <th scope="col">date d'appel</th>
+                                    <th scope="col">date de résolution</th>
+                                    <th scope="col">note</th>
 
                                 </tr>
                                 </thead>
@@ -392,38 +434,41 @@ if (isset($_GET['session'])) {
                                 <?php
                                 $doneList = getDoneList($sessionId);
                                 foreach ($doneList as $row) {
-                                        ?>
-                                        <tr <?php if ($row['call_type'] == 0){echo "class='table-light'";}else{echo "class='table-success'";}?>>
-                                            <td><?php
-                                                if ($row['call_type'] == 0){
-                                                    echo "<i class='fa-solid fa-hand fa-2x'></i>";
-                                                }else{
-                                                    echo "<i class='fa-solid fa-check fa-2x'></i>";
-                                                }
-                                                echo $row['user_id']?></td>
-                                            <td><?php
-                                                if ($row['call_type'] == 0){
-                                                    echo "Question";
-                                                }else{
-                                                    echo "Vérification";
-                                                }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php
+                                    ?>
+                                    <tr <?php if ($row['call_type'] == 0){echo "class='table-light'";}else{echo "class='table-success'";}?>>
+                                        <td><?php
+                                            if ($row['call_type'] == 0){
+                                                echo "<i class='fa-solid fa-hand fa-2x'></i>";
+                                            }else{
+                                                echo "<i class='fa-solid fa-check fa-2x'></i>";
+                                            }
+                                            echo $row['user_id']?></td>
+                                        <td><?php
+                                            if ($row['call_type'] == 0){
+                                                echo "Question";
+                                            }else{
+                                                echo "Vérification";
+                                            }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
 
-                                                //$debut = new DateTime($row['waiting_time']);
+                                            echo  $row['waiting_time'];?>
+                                        </td>
+                                        <td>
+                                            <?php
 
-                                                // Execution de code
-                                                //$fin = new DateTime('now');
-                                                $interval = getInterval($row['waiting_time']);
-                                                //$interval = $debut->diff($fin)->format('%r%y years, %m months, %d days, %h hours, %i minutes, %s seconds');
+                                            echo  $row['solved_date'];?>
+                                        </td>
+                                        <td>
+                                            <?php for ($i =0; $i < $row['rate']; $i++){
+                                                echo "<i class='fa-solid fa-star text-warning'></i>";
+                                            };?>
+                                        </td>
 
-                                                echo  $interval?>
-                                            </td>
-
-                                        </tr>
-                                        <?php
+                                    </tr>
+                                    <?php
                                 }
                                 ?>
                                 </tbody>
@@ -434,9 +479,8 @@ if (isset($_GET['session'])) {
 
             </div>
         </div>
-    </div>
-    <div>
-        <h3>Commentaires</h3>
+
+
     </div>
                 <?php
 } else {
