@@ -10,7 +10,7 @@
                     <a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Rejoindre la session</a>
+                    <a class="nav-link" href="simulate.php">Rejoindre la session</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="waiting.php">Liste d'attente</a>
