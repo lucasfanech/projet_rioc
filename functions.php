@@ -160,14 +160,14 @@ function nbCallsDone($session_id){
 }
 
 // FOnction validateCall : permet de valider un call par admin tout en attribuant une note
-function validateCall($messageId, $rate){
+function validateCall($messageId, $rate, $comment){
     include('db.php');
     date_default_timezone_set('Europe/Paris');
     $date = date('Y-m-d H:i:s');
     if ($rate !== "NULL"){
-        $sql = "UPDATE `waiting_line` SET `rate` = '".$rate."', processing = '1', solved_date = '".$date."' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
+        $sql = "UPDATE `waiting_line` SET `rate` = '".$rate."', processing = '1', solved_date = '".$date."', comment = '".$comment."' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
     }else{
-        $sql = "UPDATE `waiting_line` SET `rate` = NULL, processing = '1', solved_date = '".$date."' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
+        $sql = "UPDATE `waiting_line` SET `rate` = NULL, processing = '1', solved_date = '".$date."', comment = '".$comment."' WHERE `waiting_line`.`id_waiting` = ".$messageId.";";
     }
 
     if (!empty($connection)) {

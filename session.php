@@ -28,7 +28,12 @@ if (isset($_POST['sendRate'])){
     if (isset($_POST['whichCall'])){
         $whichCall = $_POST['whichCall'];
     }
-    validateCall($whichCall,$rate);
+    if (isset($_POST['comment'])){
+        $comment = $_POST['comment'];
+    }else{
+        $comment = "";
+    }
+    validateCall($whichCall,$rate ,$comment);
     $messageRate = "
     <div class='alert alert-warning alert-dismissible fade show' role='alert'>
        Vous avez noté de: <strong>".$rate." <i class='fa-solid fa-star'></i> </strong> ce groupe.
@@ -334,7 +339,12 @@ if (isset($_GET['session'])) {
                                                                 </div>
 
 
+
                                                             </div>
+
+                                                        </div>
+                                                        <div class="mb-3 d-flex justify-content-center">
+                                                            <input class="form-control" type="text" id="comment" name="comment" placeholder="Insérez un commentaire">
 
                                                         </div>
                                                     </div>
@@ -405,9 +415,6 @@ if (isset($_GET['session'])) {
 
     </div>
     <div class="row">
-        <div class="col-md-3">
-            <h3>Commentaires</h3>
-        </div>
         <div class="col">
 
             <div class="card text-bg-danger" >
@@ -426,6 +433,7 @@ if (isset($_GET['session'])) {
                                     <th scope="col">type d'appel</th>
                                     <th scope="col">date d'appel</th>
                                     <th scope="col">date de résolution</th>
+                                    <th scope="col">commentaire</th>
                                     <th scope="col">note</th>
 
                                 </tr>
@@ -460,6 +468,11 @@ if (isset($_GET['session'])) {
                                             <?php
 
                                             echo  $row['solved_date'];?>
+                                        </td>
+                                        <td>
+                                            <?php
+
+                                            echo  $row['comment'];?>
                                         </td>
                                         <td>
                                             <?php for ($i =0; $i < $row['rate']; $i++){
