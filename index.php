@@ -27,7 +27,7 @@ include ('functions.php');
 
         <div class="p-5 mb-4 bg-light rounded-3">
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Projet RIOC</h1>
+                <h1 class="display-5 fw-bold">CMM</h1>
                 <p class="col-md-8 fs-4">Une telecommande fournie aux élèves leur permet d'appeler leur enseignant pour toute question ou vérification du travail demandé, tout en favorisant l'équité grâce à un système de file d'attente.</p>
                 <button class="btn btn-primary btn-lg" type="button">Découvrir le projet</button>
                 <!-- Session en cours -->

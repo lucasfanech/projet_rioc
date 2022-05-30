@@ -31,21 +31,28 @@ include ('header.php');
 <?php
 include('functions.php');
 $activeSession = getSession();
-if ($activeSession[0] == ""){
-    $error = "<br><div class='alert alert-danger text-center' role='alert'>Aucune session n'est ouverte !<br> Revenez plus tard</div>";
+if ($activeSession !== null){
+    if ($activeSession[0] == ""){
+        $error = "<br><div class='alert alert-danger text-center' role='alert'>Aucune session n'est ouverte !<br> Revenez plus tard</div>";
+    }
+
 }
+
+
 
 
 // check numéro de table
 if (isset($_POST['table'])){
-    if ($activeSession[0] != "") {
-        if ((preg_match('#([0-9]+)#', $_POST['table'])) and (is_numeric($_POST['table']))) {
-            $idTable = $_POST['table'];
+    if ($activeSession !== null) {
+        if ($activeSession[0] != "") {
+            if ((preg_match('#([0-9]+)#', $_POST['table'])) and (is_numeric($_POST['table']))) {
+                $idTable = $_POST['table'];
+            } else {
+                $error = "<br><div class='alert alert-danger text-center' role='alert'>Le numéro de la table doit être un entier !</div>";
+            }
         } else {
-            $error = "<br><div class='alert alert-danger text-center' role='alert'>Le numéro de la table doit être un entier !</div>";
+            header('Location: simulate.php');
         }
-    }else{
-        header('Location: simulate.php');
     }
 }
 
@@ -53,10 +60,10 @@ if (isset($_POST['table'])){
     // Si on a pas défini la table
 if (!isset($idTable)){
     ?>
-    <form method="POST" action="simulate.php">
+    <form class="shadow rounded" method="POST" action="simulate.php">
         <div class="card " style="width: 24rem;">
             <div class="card-header d-flex justify-content-center">
-                <label for="table" class="form-label">Numéro de table</label>
+                <h3>Numéro de table</h3>
             </div>
             <div class="card-body ">
 
@@ -73,10 +80,20 @@ if (!isset($idTable)){
 
             </div>
             <div class="card-footer text-muted d-flex justify-content-center">
-                 <?php if($activeSession[0] != ""){ echo "Session active: ".$activeSession[2]." (n°".$activeSession[0].")";}
+                 <?php
+                 if ($activeSession !== null){
+                     if($activeSession[0] != ""){
+                         echo "Session active: ".$activeSession[2]." (n°".$activeSession[0].")";
+                     }
+                     else{
+                         echo "Aucune session active";
+                     }
+                 }
                  else{
                      echo "Aucune session active";
-                 }?>
+                 }
+
+                 ?>
             </div>
         </div>
 
@@ -92,28 +109,35 @@ if (!isset($idTable)){
 }
 else{
     // Si on a défini la table
+    ?>
+                <form class="shadow rounded" method="POST" action="simulate.php">
+                    <div class="card " style="width: 24rem;">
+                        <div class="card-header d-flex justify-content-center">
+                            <label for="table" class="form-label">
+                <?php
+
     //Traitement Formulaire:
     // Envoi formulaire Appel/verif/cancel
     if (isset($_POST['call'])){
         if (processButton(1, $activeSession[0], $idTable )){
-            echo "Requête envoyée !<br>";
+            $msgInfo = "<div class='alert alert-primary' role='alert'>Requête envoyée !</div>";
         }else{
-            echo "erreur !<br>";
+            $msgInfo = "<div class='alert alert-danger' role='alert'> Erreur dans la requête !</div>";
         }
     }
     else if(isset($_POST['verify'])){
         if(processButton(2, $activeSession[0], $idTable )){
-            echo "Requête envoyée !<br>";
+            $msgInfo = "<div class='alert alert-primary' role='alert'>Requête envoyée !</div>";
         }else{
-            echo "erreur !<br>";
+            $msgInfo = "<div class='alert alert-danger' role='alert'> Erreur dans la requête !</div>";
         }
     }
     else if(isset($_POST['cancel'])){
         if(processButton(0, $activeSession[0], $idTable )){
-            echo "Requête annulée !<br>";
+            $msgInfo = "<div class='alert alert-warning' role='alert'>Requête annulée !</div>";
         }
         else{
-            echo "erreur !<br>";
+            $msgInfo = "<div class='alert alert-danger' role='alert'> Erreur dans la requête !</div>";
         }
     }else{
 
@@ -124,54 +148,76 @@ else{
 
     $stateUser = stateUser($activeSession[0],$idTable);
     if ($stateUser == 1){
-        echo "Table n° ".$idTable." - Vous avez appelé l'animateur pour une question.";
+        echo "<h3>Table n°".$idTable."</h3><span>Vous avez appelé l'animateur pour une question.</span>";
     }
     else if ($stateUser == 2){
-        echo "Table n° ".$idTable." - Vous avez appelé l'animateur pour une vérification.";
+        echo "<h3>Table n°".$idTable."</h3><span>Vous avez appelé l'animateur pour une vérification.</span>";
     }
     else if ($stateUser == 0){
-        echo "Table n° ".$idTable." - Vous pouvez cliquer.";
+        echo "<h3>Table n°".$idTable."</h3><span>Vous pouvez choisir d'appeler l'animateur pour une question ou pour une vérification.</span>";
     }
+
 
     if ($stateUser == 1){
         // Appel
         ?>
-        <form method="POST" action="simulate.php">
+                        </label>
+                    </div>
+                <div class="card-body d-flex justify-content-center">
+                    <div class="d-grid gap-2">
+                        <input id="table" name="table" type="hidden" value="<?php echo $idTable ?>">
+                        <button class="btn btn-secondary btn-lg " type="submit" name="call" value="call" disabled>Question</button>
+                        <button class="btn btn-success btn-lg " type="submit" name="verify" value="verify" disabled>Vérification</button>
+                        <button class="btn btn-danger btn-lg " type="submit" name="cancel" value="cancel" >Annuler</button>
+                    </div>
+                </div>
+                <div class="card-footer">
 
-            <input id="table" name="table" type="hidden" value="<?php echo $idTable ?>">
-            <button class="btn btn-secondary" type="submit" name="call" value="call" disabled>Bouton appel (0)</button>
-            <button class="btn btn-success" type="submit" name="verify" value="verify" disabled>Bouton verif (1)</button>
-            <button class="btn btn-danger" type="submit" name="cancel" value="cancel" >Annuler</button>
-        </form>
         <?php
 
     }
     else if ($stateUser == 2){
         // Verification
         ?>
-        <form method="POST" action="simulate.php">
-
-            <input id="table" name="table" type="hidden" value="<?php echo $idTable ?>">
-            <button class="btn btn-secondary" type="submit" name="call" value="call" disabled>Bouton appel (0)</button>
-            <button class="btn btn-success" type="submit" name="verify" value="verify" disabled>Bouton verif (1)</button>
-            <button class="btn btn-danger" type="submit" name="cancel" value="cancel" >Annuler</button>
-        </form>
+                    </label>
+                </div>
+                <div class="card-body d-flex justify-content-center">
+                    <div class="d-grid gap-2">
+                        <input id="table" name="table" type="hidden" value="<?php echo $idTable ?>">
+                        <button class="btn btn-secondary btn-lg " type="submit" name="call" value="call" disabled>Question</button>
+                        <button class="btn btn-success btn-lg " type="submit" name="verify" value="verify" disabled>Vérification</button>
+                        <button class="btn btn-danger btn-lg " type="submit" name="cancel" value="cancel" >Annuler</button>
+                    </div>
+                </div>
+                <div class="card-footer ">
         <?php
 
     }
     else {
         // Rien
         ?>
-        <form method="POST" action="simulate.php">
-
-            <input id="table" name="table" type="hidden" value="<?php echo $idTable ?>">
-            <button class="btn btn-secondary" type="submit" name="call" value="call" >Bouton appel (0)</button>
-            <button class="btn btn-success" type="submit" name="verify" value="verify" >Bouton verif (1)</button>
-            <button class="btn btn-danger" type="submit" name="cancel" value="cancel" disabled >Annuler</button>
-        </form>
+                    </label>
+                </div>
+                <div class="card-body d-flex justify-content-center">
+                    <div class="d-grid gap-2">
+                        <input id="table" name="table" type="hidden" value="<?php echo $idTable ?>">
+                        <button class="btn btn-secondary btn-lg " type="submit" name="call" value="call" >Question</button>
+                        <button class="btn btn-success btn-lg " type="submit" name="verify" value="verify" >Vérification</button>
+                        <button class="btn btn-danger btn-lg " type="submit" name="cancel" value="cancel" disabled >Annuler</button>
+                    </div>
+                </div>
+                <div class="card-footer">
         <?php
 
     }
+    if (isset($msgInfo)){
+        echo $msgInfo;
+    }
+    ?>
+                </div>
+            </div>
+        </form>
+            <?php
 
 
 

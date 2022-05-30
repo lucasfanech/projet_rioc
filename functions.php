@@ -35,7 +35,7 @@ function getSession(){
 
     }
     else{
-        return mysqli_error($connection);
+        return false;
     }
     mysqli_close($connection);
 }
@@ -229,7 +229,12 @@ function processButton($num, $session, $userId){
 
         if($result){
             $row = mysqli_fetch_row($result);
-            $entryId = $row[0];
+            if (isset($row[0])){
+                $entryId = $row[0];
+            }else{
+                return false;
+            }
+
         }
         // suppression
         $sql = "UPDATE `waiting_line` SET `processing` = '1' WHERE `waiting_line`.`id_waiting` = ".$entryId.";";
