@@ -1,5 +1,5 @@
 <?php
-
+$tab = "admin";
 include ('db.php');
 include ('functions.php'); // Fonctions PHP
 $isConnected = false;

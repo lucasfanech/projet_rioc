@@ -11,6 +11,7 @@
 </head>
 <body>
 <?php
+$tab = "join";
 include ('header.php');
 ?>
 

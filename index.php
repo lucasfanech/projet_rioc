@@ -11,6 +11,7 @@
 </head>
 <body>
 <?php
+$tab = "index";
 include ('header.php');
 include ('functions.php');
 ?>

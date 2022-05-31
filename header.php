@@ -7,16 +7,16 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
+                    <a class="nav-link<?php if (isset($tab)){if ($tab == "index" ){ echo " active";}}?>" aria-current="page" href="index.php">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="simulate.php">Rejoindre</a>
+                    <a class="nav-link<?php if (isset($tab)){if ($tab == "join" ){ echo " active";}}?>" href="simulate.php">Rejoindre</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="waiting.php">Liste d'attente</a>
+                    <a class="nav-link<?php if (isset($tab)){if ($tab == "waiting" ){ echo " active";}}?>" href="waiting.php">Liste d'attente</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="admin.php">Admin</a>
+                    <a class="nav-link<?php if (isset($tab)){if ($tab == "admin" ){ echo " active";}}?>" href="admin.php">Admin</a>
                 </li>
             </ul>
         </div>
