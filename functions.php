@@ -266,6 +266,7 @@ function getSessionsList(){
 
 function getInterval($date){
     $debut = new DateTime($date,new DateTimeZone('Europe/Paris'));
+    $interval = "";
     // Execution de code
     $fin = new DateTime('now');
     if (!($debut->diff($fin)->format('%s') == 0)){
