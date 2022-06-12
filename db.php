@@ -3,7 +3,7 @@
 $db_host     = 'localhost';
 $db_username = 'root';
 $db_password = '';
-$db_name     = 'projet_rioc';
+$db_name     = 'cmm';
 
 
 $connection=mysqli_connect($db_host, $db_username, $db_password,$db_name);
