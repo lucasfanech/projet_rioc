@@ -1,8 +1,2 @@
-# projet_rioc
-Une télécommande fournie aux élèves leur permet d'appeler leur enseignant pour toute question ou vérification du travail demandé, tout en favorisant l'équité grâce à un système de file d'attente.
-
-Ce repo est l'ensemble des ressources WEB servant à la réception et l'affichage des données de la télécommande. 
-La page WEB fournit une interface utilisateur qui permet de simuler cette télécommande.
-La télécommande communique avec un serveur Node-RED grâce à une connexion sans fil à longue distance (LoRaWan). 
-
-Plus d'informations sur la télécommande à venir...
+# CMM | CallMeMaybe
+A remote control distributed to students allows them to call the teacher for any question or check the work requested. During a call, the student is placed on a waiting list. Then, the teacher can follow the waiting list in order to help or check the work of the students who are waiting. This system respect equity of students by the fact that: "first come, first served". The remote control use a LoRa communication which is a wireless long range connection and it has low power consumption.
